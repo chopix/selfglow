@@ -1,0 +1,22 @@
+{
+	"name": "dlyatelki",
+	"version": "1.0.0",
+	"type": "module",
+	"main": "index.js",
+	"license": "MIT",
+	"dependencies": {
+		"@grammyjs/conversations": "^1.2.0",
+		"@grammyjs/parse-mode": "^1.9.0",
+		"@grammyjs/ratelimiter": "^1.2.0",
+		"@grammyjs/runner": "^2.0.3",
+		"@grammyjs/storage-file": "^2.4.2",
+		"dotenv": "^16.4.5",
+		"grammy": "^1.22.4",
+		"mysql": "^2.18.1",
+		"mysql2": "^3.9.7",
+		"sequelize": "^6.37.3"
+	},
+	"scripts": {
+		"dev": "nodemon bot.js --ignore sessions/"
+	}
+}
