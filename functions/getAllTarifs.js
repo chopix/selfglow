@@ -1,15 +1,21 @@
 import { Tarif } from '../models/Tarif.js'
+import { Config } from './../models/Config.js'
 
 export async function getAllTarifs(ctx) {
 	const tarifs = await Tarif.findAll()
 	const pairs = []
+	const value = await Config.findByPk(1)
 	tarifs.forEach(e => {
 		const currency = e.currency.substr(2)
-		pairs.push([`${e.name} - ${e.price}${currency}`, String(e.id)])
+		if (value.showPriceAtTarif) {
+			pairs.push([`${e.name} - ${e.price}${currency}`, String(e.id)])
+		} else {
+			pairs.push([`${e.name}`, String(e.id)])
+		}
 	})
 	let keyboard = []
 	pairs.forEach((pair, i) => {
-		let buttonText = i >= pairs.length - 2 ? pair[0] : `#${i + 1} ${pair[0]}`
+		let buttonText = i >= pairs.length - 2 ? pair[0] : `${pair[0]}`
 		let row = []
 		row.push({
 			text: buttonText,
