@@ -7,6 +7,10 @@ import { banUserConversation } from './banUserConversation.js'
 import { unbanUserConversation } from './unbanUserConversation.js'
 import { addAdminConversation } from './addAdminConversation.js'
 import { deleteAdminConversation } from './deleteAdminConversation.js'
+import { changeTarifPriorityConversation } from './changeTarifPriorityConversation.js'
+import { addChannelConversation } from './addChannelConversation.js'
+import tarifEdit from './tarifEdit/index.js'
+import { addChatConversation } from './addChatConversation.js'
 
 const composer = new Composer()
 
@@ -17,5 +21,10 @@ composer.use(createConversation(banUserConversation))
 composer.use(createConversation(unbanUserConversation))
 composer.use(createConversation(addAdminConversation))
 composer.use(createConversation(deleteAdminConversation))
+composer.use(createConversation(changeTarifPriorityConversation))
+composer.use(createConversation(addChannelConversation))
+composer.use(createConversation(addChatConversation))
+
+composer.use(tarifEdit)
 
 export default composer

@@ -2,17 +2,27 @@ import { Tarif } from '../models/Tarif.js'
 import { Config } from './../models/Config.js'
 
 export async function getAllTarifs(ctx) {
+	// Fetch all tariffs
 	const tarifs = await Tarif.findAll()
-	const pairs = []
+
+	// Sort tariffs by priority
+	tarifs.sort((a, b) => a.priority - b.priority)
+
+	// Fetch configuration
 	const value = await Config.findByPk(1)
+
+	// Create pairs array
+	const pairs = []
 	tarifs.forEach(e => {
-		const currency = e.currency.substr(2)
+		const currency = e.currency.split(' ')[1]
 		if (value.showPriceAtTarif) {
-			pairs.push([`${e.name} - ${e.price}${currency}`, String(e.id)])
+			pairs.push([`${e.name} - ${e.price} ${currency}`, String(e.id)])
 		} else {
 			pairs.push([`${e.name}`, String(e.id)])
 		}
 	})
+
+	// Create inline keyboard
 	let keyboard = []
 	pairs.forEach((pair, i) => {
 		let buttonText = i >= pairs.length - 2 ? pair[0] : `${pair[0]}`
@@ -23,7 +33,9 @@ export async function getAllTarifs(ctx) {
 		})
 		keyboard.push(row)
 	})
-	await ctx.reply(`<b>Выберите желаемый для вас тарифный план:</b>`, {
+
+	// Send the message with the keyboard
+	await ctx.reply('<b>Выберите желаемый для вас тарифный план:</b>', {
 		reply_markup: {
 			inline_keyboard: keyboard,
 		},

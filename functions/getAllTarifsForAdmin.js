@@ -1,29 +1,13 @@
-import { Composer } from 'grammy'
-import { Config } from '../models/Config.js'
 import { Tarif } from '../models/Tarif.js'
-import { adminMiddleware } from '../middlewares/adminMiddleware.js'
+import { Config } from '../models/Config.js'
 
-const composer = new Composer()
-
-composer.callbackQuery('showPriceAtTarif', adminMiddleware, async ctx => {
+export async function getAllTarifsForAdmin(ctx) {
 	// Fetch all tariffs
 	const tarifs = await Tarif.findAll()
+	const config = await Config.findByPk(1)
 
 	// Sort tariffs by priority
 	tarifs.sort((a, b) => a.priority - b.priority)
-
-	// Fetch configuration
-	const config = await Config.findByPk(1)
-
-	// Update showPriceAtTarif setting
-	if (config.showPriceAtTarif) {
-		await Config.update({ showPriceAtTarif: false }, { where: { id: 1 } })
-	} else {
-		await Config.update({ showPriceAtTarif: true }, { where: { id: 1 } })
-	}
-
-	// Fetch updated configuration
-	const updatedValue = await Config.findByPk(1)
 
 	// Create pairs array
 	const pairs = []
@@ -33,7 +17,7 @@ composer.callbackQuery('showPriceAtTarif', adminMiddleware, async ctx => {
 	})
 
 	// Add config options to pairs
-	if (updatedValue.showPriceAtTarif) {
+	if (config.showPriceAtTarif) {
 		pairs.push(['✅ Отображать цену в названии тарифа', 'showPriceAtTarif'])
 	} else {
 		pairs.push(['❌ Отображать цену в названии тарифа', 'showPriceAtTarif'])
@@ -67,10 +51,13 @@ composer.callbackQuery('showPriceAtTarif', adminMiddleware, async ctx => {
 		keyboard.push(row)
 	})
 
-	// Edit the message reply markup
-	await ctx.editMessageReplyMarkup({
-		reply_markup: { inline_keyboard: keyboard },
+	// Send the message with the keyboard
+	const message = await ctx.reply('Список ваших категорий и тарифов', {
+		reply_markup: {
+			inline_keyboard: keyboard,
+		},
 	})
-})
 
-export default composer
+	// Store the message ID in session
+	ctx.session.inlineTarifMessage = message.message_id
+}
