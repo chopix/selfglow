@@ -159,39 +159,39 @@ app.get('/', (req, res) => {
 app.post('/webhook', async (req, res) => {
 	const data = req.body
 	console.log(data)
-	if (data.payment_status && data.payment_status === 'success') {
-		try {
-			const orderId = data.order_num
-			const payment = await Payment.findByPk(orderId)
-			await Payment.update({ status: 'PAID' }, { where: { id: orderId } })
-			const userId = payment.tgId
-			const user = await User.findOne({ where: { tgId: userId } })
-			const tarifId = payment.tarifId
-			const tarif = await Tarif.findByPk(tarifId)
-			const currencyForLink = tarif.currency.split(' ')[1].toLowerCase()
-			const resource = await Resource.findByPk(tarif.resourceId)
-			const days = Math.floor(tarif.time / 1440)
+	// if (data.payment_status && data.payment_status === 'success') {
+	try {
+		const orderId = data.order_num
+		const payment = await Payment.findByPk(orderId)
+		await Payment.update({ status: 'PAID' }, { where: { id: orderId } })
+		const userId = payment.tgId
+		const user = await User.findOne({ where: { tgId: userId } })
+		const tarifId = payment.tarifId
+		const tarif = await Tarif.findByPk(tarifId)
+		const currencyForLink = tarif.currency.split(' ')[1].toLowerCase()
+		const resource = await Resource.findByPk(tarif.resourceId)
+		const days = Math.floor(tarif.time / 1440)
 
-			const orderSum = data.sum.split(',')[0]
-			if (data.currency === currencyForLink && orderSum === tarif.price) {
-				const invite = await bot.api.createChatInviteLink(resource.resourceId, {
-					member_limit: 1,
-				})
-				await bot.api.sendMessage(userId, 'Вы успешно оплатили тариф')
-				await bot.api.sendMessage(
-					userId,
-					`Ссылка на ресурс - ${invite.invite_link}`
-				)
-				await Subscriber.create({
-					userId: user.id,
-					tarifId: tarifId,
-					remaining: days,
-				})
-			}
-		} catch (e) {
-			console.log(e)
+		const orderSum = data.sum.split(',')[0]
+		if (data.currency === currencyForLink && orderSum === tarif.price) {
+			const invite = await bot.api.createChatInviteLink(resource.resourceId, {
+				member_limit: 1,
+			})
+			await bot.api.sendMessage(userId, 'Вы успешно оплатили тариф')
+			await bot.api.sendMessage(
+				userId,
+				`Ссылка на ресурс - ${invite.invite_link}`
+			)
+			await Subscriber.create({
+				userId: user.id,
+				tarifId: tarifId,
+				remaining: days,
+			})
 		}
+	} catch (e) {
+		console.log(e)
 	}
+	// }
 })
 
 // Start the server and listen on the specified port
