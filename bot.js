@@ -172,25 +172,25 @@ app.post('/webhook', async (req, res) => {
 			const resource = await Resource.findByPk(tarif.resourceId)
 			const days = Math.floor(tarif.time / 1440)
 
-			const orderSum = data.sum.split(',')[0]
+			const orderSum = data.sum.split('.')[0]
 			console.log(
 				`DATA CURRENCY: ${data.currency}, CURRENCYFORLINK: ${currencyForLink} orderSum: ${orderSum} tarifPrice ${tarif.price}`
 			)
-			// if (data.currency === currencyForLink && orderSum === tarif.price) {
-			const invite = await bot.api.createChatInviteLink(resource.resourceId, {
-				member_limit: 1,
-			})
-			await bot.api.sendMessage(userId, 'Вы успешно оплатили тариф')
-			await bot.api.sendMessage(
-				userId,
-				`Ссылка на ресурс - ${invite.invite_link}`
-			)
-			await Subscriber.create({
-				userId: user.id,
-				tarifId: tarifId,
-				remaining: days,
-			})
-			// }
+			if (data.currency == currencyForLink && orderSum == tarif.price) {
+				const invite = await bot.api.createChatInviteLink(resource.resourceId, {
+					member_limit: 1,
+				})
+				await bot.api.sendMessage(userId, 'Вы успешно оплатили тариф')
+				await bot.api.sendMessage(
+					userId,
+					`Ссылка на ресурс - ${invite.invite_link}`
+				)
+				await Subscriber.create({
+					userId: user.id,
+					tarifId: tarifId,
+					remaining: days,
+				})
+			}
 		} catch (e) {
 			console.log(e)
 		}
