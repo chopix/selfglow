@@ -190,6 +190,7 @@ app.post('/webhook', async (req, res) => {
 					tarifId: tarifId,
 					remaining: days,
 				})
+				return res.sendStatus(200)
 			}
 		} catch (e) {
 			console.log(e)

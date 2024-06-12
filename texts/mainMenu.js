@@ -13,6 +13,4 @@ composer.hears('🛒 Тарифы', async ctx => {
 	await getAllTarifs(ctx)
 })
 
-composer.hears('📊 Подписки', async ctx => {})
-
 export default composer
