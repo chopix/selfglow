@@ -19,7 +19,18 @@ User.init(
 		username: {
 			type: DataTypes.TEXT,
 			allowNull: true,
-			default: 'none',
+		},
+		fullName: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		firstName: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		lastName: {
+			type: DataTypes.TEXT,
+			allowNull: true,
 		},
 		isBanned: {
 			type: DataTypes.BOOLEAN,

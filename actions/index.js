@@ -11,6 +11,8 @@ import changeTarifPriority from './changeTarifPriority.js'
 import selectTarif from './selectTarif.js'
 import continueSubscription from './continiueSubscription.js'
 import resources from './resources.js'
+import settingsStats from './settingsStats.js'
+import listings from './listings.js'
 
 const composer = new Composer()
 
@@ -26,7 +28,9 @@ composer.use(
 	changeTarifPriority,
 	selectTarif,
 	continueSubscription,
-	resources
+	resources,
+	settingsStats,
+	listings
 )
 
 export default composer

@@ -6,17 +6,22 @@ import {
 
 export default async ctx => {
 	const user = await User.findOne({ where: { tgId: ctx.from.id } })
+	console.log(ctx.from)
 	if (!user) {
-		if (ctx.from.username) {
-			const user = await User.create({
-				tgId: ctx.from.id,
-				username: `@${ctx.from.username}`,
-			})
-		} else {
-			const user = await User.create({
-				tgId: ctx.from.id,
-			})
+		let fullname
+		if (!ctx.from.last_name) {
+			fullname = ctx.from.first_name
+		} else if (!ctx.from.first_name) {
+			fullname = null
 		}
+		const user = await User.create({
+			tgId: ctx.from.id,
+			username:
+				ctx.from.username !== undefined ? `@${ctx.from.username}` : null,
+			firstName: ctx.from.first_name !== undefined ? ctx.from.first_name : null,
+			lastName: ctx.from.last_name !== undefined ? ctx.from.last_name : null,
+			fullName: fullname,
+		})
 		await ctx.reply(
 			`Привет, красотка! 💕
 Рада приветствовать тебя в своем боте, который поможет тебе разобраться во всех интересующих вопросах:

@@ -11,6 +11,7 @@ import { changeTarifPriorityConversation } from './changeTarifPriorityConversati
 import { addChannelConversation } from './addChannelConversation.js'
 import tarifEdit from './tarifEdit/index.js'
 import { addChatConversation } from './addChatConversation.js'
+import { sendListingConversation } from './sendListingConversation.js'
 
 const composer = new Composer()
 
@@ -24,6 +25,7 @@ composer.use(createConversation(deleteAdminConversation))
 composer.use(createConversation(changeTarifPriorityConversation))
 composer.use(createConversation(addChannelConversation))
 composer.use(createConversation(addChatConversation))
+composer.use(createConversation(sendListingConversation))
 
 composer.use(tarifEdit)
 
