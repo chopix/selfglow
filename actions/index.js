@@ -13,6 +13,7 @@ import continueSubscription from './continiueSubscription.js'
 import resources from './resources.js'
 import settingsStats from './settingsStats.js'
 import listings from './listings.js'
+import settingsPromo from './settingsPromo.js'
 
 const composer = new Composer()
 
@@ -30,7 +31,8 @@ composer.use(
 	continueSubscription,
 	resources,
 	settingsStats,
-	listings
+	listings,
+	settingsPromo
 )
 
 export default composer

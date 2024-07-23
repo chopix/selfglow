@@ -3,6 +3,7 @@ import {
 	adminStartKeyboard,
 	startKeyboard,
 } from '../keyboards/startKeyboard.js'
+import 'dotenv/config'
 
 export default async ctx => {
 	const user = await User.findOne({ where: { tgId: ctx.from.id } })
@@ -22,6 +23,12 @@ export default async ctx => {
 			lastName: ctx.from.last_name !== undefined ? ctx.from.last_name : null,
 			fullName: fullname,
 		})
+		qweasd
+		await ctx.api.sendMessage(
+			process.env.ADMIN_TG_ID,
+			`🆕Новый пользователь: <a href="https://t.me/${ctx.from.username}">${fullname}</a>
+🆔UserID: <code>${ctx.from.id}</code>`
+		)
 		await ctx.reply(
 			`Привет, красотка! 💕
 Рада приветствовать тебя в своем боте, который поможет тебе разобраться во всех интересующих вопросах:

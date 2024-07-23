@@ -30,6 +30,6 @@ export const sendListingConversation = async (conversation, ctx) => {
 	) {
 		return sendListings(ctx)
 	} else {
-		await sendListingFunction(ctx, text, ctx.listingType)
+		return sendListingFunction(ctx, text, ctx.listingType)
 	}
 }
